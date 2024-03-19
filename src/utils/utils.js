@@ -41,6 +41,10 @@ const Map = (...args) => args.length === 1 ? mapCurried(args[0]) : mapStandard(.
 
 const ConsoleLog = text => console.log(text)
 
+const runAsASynchronousPromises = fn => promises => {
+    return promises.reduce((acc, val) => acc.finally(() => fn(val)), Promise.resolve())
+}
+
 const getDatesFromTo = ({moment, from, to}) => {
     return from.diff(to) >= 0
         ? [from.format('YYYY-MM-DD')]
@@ -55,4 +59,4 @@ const getCommandToExecute = ({moment, command, path}) => date => {
         .replace(/<PATH>/gi, path)
 }
 
-export {Pipe, Map, ConsoleLog, getDatesFromTo, getCommandToExecute}
+export {Pipe, Map, ConsoleLog, runAsASynchronousPromises, getDatesFromTo, getCommandToExecute}
